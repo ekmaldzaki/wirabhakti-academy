@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
+import { DateTime } from "luxon";
 
 export default function ListAbsensiToFill() {
   const [sessions, setSessions] = useState<any[]>([]);
@@ -27,19 +28,25 @@ export default function ListAbsensiToFill() {
         return;
       }
 
-      const { data: sesi, error: sesiError } = await supabase
+      const now = DateTime.now().setZone("Asia/Jakarta");
+
+      const { data: sesi } = await supabase
         .from("absensi_sessions")
         .select("*, pelatih_profiles(nama_lengkap)")
         .ilike("cabang_olahraga", profile.cabang_olahraga)
         .order("tanggal", { ascending: false });
 
-      console.log("Cabang siswa:", profile.cabang_olahraga);
-      console.log("Sesi ditemukan:", sesi);
-      console.log("Error sesi:", sesiError);
+      const filtered = (sesi || []).filter((s) => {
+        const endTime = DateTime.fromISO(`${s.tanggal}T${s.waktu_selesai}`, {
+          zone: "Asia/Jakarta",
+        });
+        return endTime > now;
+      });
 
       setCabang(profile.cabang_olahraga);
-      setSessions(sesi || []);
+      setSessions(filtered);
     };
+
     fetch();
   }, []);
 
@@ -60,16 +67,34 @@ function FormIsiAbsensi({ session, siswaId }: any) {
   const [sudahAbsen, setSudahAbsen] = useState(false);
 
   useEffect(() => {
-    const check = async () => {
+    const checkAndAutoAbsent = async () => {
+      const now = DateTime.now().setZone("Asia/Jakarta");
+      const end = DateTime.fromISO(
+        `${session.tanggal}T${session.waktu_selesai}`,
+        {
+          zone: "Asia/Jakarta",
+        }
+      );
+
       const { data } = await supabase
         .from("absensi_entries")
         .select("id")
         .eq("session_id", session.id)
         .eq("siswa_id", siswaId)
         .single();
-      if (data) setSudahAbsen(true);
+
+      if (data) {
+        setSudahAbsen(true);
+      } else if (now > end) {
+        await supabase.from("absensi_entries").insert({
+          session_id: session.id,
+          siswa_id: siswaId,
+          status: "tidak hadir",
+        });
+        setSudahAbsen(true);
+      }
     };
-    check();
+    checkAndAutoAbsent();
   }, [session.id, siswaId]);
 
   const handleSubmit = async (e: any) => {
