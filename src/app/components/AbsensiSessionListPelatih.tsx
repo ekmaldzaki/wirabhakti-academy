@@ -32,35 +32,33 @@ export default function AbsensiSessionListPelatih() {
     const fetchAbsensi = async () => {
       const {
         data: { user },
-        error: userError,
       } = await supabase.auth.getUser();
-      if (userError || !user) return;
+      if (!user) return;
 
       const { data: absensiData, error } = await supabase
         .from("absensi_entries")
         .select(
           `
-    id,
-    status,
-    catatan,
-    siswa_profiles!fk_siswa_id(nama_lengkap),
-    absensi_sessions!fk_session_id(pelatih_id, cabang_olahraga, tanggal, waktu_mulai, waktu_selesai)
-    `
+          id,
+          status,
+          catatan,
+          siswa_profiles!fk_siswa_id(nama_lengkap),
+          absensi_sessions!fk_session_id(
+            pelatih_id,
+            cabang_olahraga,
+            tanggal,
+            waktu_mulai,
+            waktu_selesai
+          )
+        `
         )
         .eq("absensi_sessions.pelatih_id", user.id);
 
       if (error) {
-        console.error("Gagal fetch absensi:", error.message, error.details);
-      } else {
-        console.log("Data absensi:", absensiData);
-      }
-
-      if (error) {
-        console.error("Gagal fetch absensi:", error.message, error.details);
+        console.error("Gagal fetch absensi:", error.message);
         return;
       }
 
-      // Pastikan relasi bukan array (kalau perlu handle manual)
       const cleanData = (absensiData || []).map((entry: any) => ({
         ...entry,
         siswa_profiles: Array.isArray(entry.siswa_profiles)
@@ -120,7 +118,7 @@ export default function AbsensiSessionListPelatih() {
     <div className="space-y-4 mt-4 text-black">
       <h2 className="text-xl font-bold">Daftar Absensi Siswa</h2>
 
-      {/* Filter controls */}
+      {/* Filter */}
       <div className="flex gap-2 flex-wrap items-center">
         <select
           className="border px-2 py-1"
@@ -158,7 +156,7 @@ export default function AbsensiSessionListPelatih() {
         </select>
       </div>
 
-      {/* Tabel absensi */}
+      {/* Tabel */}
       <div className="overflow-x-auto">
         <table className="w-full text-sm border mt-2">
           <thead>
@@ -168,6 +166,7 @@ export default function AbsensiSessionListPelatih() {
               <th className="border p-1">Catatan</th>
               <th className="border p-1">Cabang</th>
               <th className="border p-1">Tanggal</th>
+              <th className="border p-1">Jam</th>
             </tr>
           </thead>
           <tbody>
@@ -176,7 +175,15 @@ export default function AbsensiSessionListPelatih() {
                 <td className="border p-1">
                   {entry.siswa_profiles?.nama_lengkap || "Tidak Diketahui"}
                 </td>
-                <td className="border p-1">{entry.status}</td>
+                <td className="border p-1">
+                  {entry.status === "tidak hadir" ? (
+                    <span className="text-red-600 font-semibold">
+                      {entry.status}
+                    </span>
+                  ) : (
+                    entry.status
+                  )}
+                </td>
                 <td className="border p-1">{entry.catatan || "-"}</td>
                 <td className="border p-1">
                   {entry.absensi_sessions?.cabang_olahraga || "-"}
@@ -184,11 +191,16 @@ export default function AbsensiSessionListPelatih() {
                 <td className="border p-1">
                   {entry.absensi_sessions?.tanggal || "-"}
                 </td>
+                <td className="border p-1">
+                  {entry.absensi_sessions
+                    ? `${entry.absensi_sessions.waktu_mulai} - ${entry.absensi_sessions.waktu_selesai}`
+                    : "-"}
+                </td>
               </tr>
             ))}
             {filtered.length === 0 && (
               <tr>
-                <td colSpan={5} className="text-center py-2 text-gray-500">
+                <td colSpan={6} className="text-center py-2 text-gray-500">
                   Tidak ada data
                 </td>
               </tr>

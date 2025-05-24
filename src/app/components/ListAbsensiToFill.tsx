@@ -64,46 +64,43 @@ export default function ListAbsensiToFill() {
 
 function FormIsiAbsensi({ session, siswaId }: any) {
   const [status, setStatus] = useState("hadir");
+  const [catatan, setCatatan] = useState("");
   const [sudahAbsen, setSudahAbsen] = useState(false);
 
   useEffect(() => {
-    const checkAndAutoAbsent = async () => {
-      const now = DateTime.now().setZone("Asia/Jakarta");
-      const end = DateTime.fromISO(
-        `${session.tanggal}T${session.waktu_selesai}`,
-        {
-          zone: "Asia/Jakarta",
-        }
-      );
-
-      const { data } = await supabase
+    const fetchAbsensi = async () => {
+      const { data: entry } = await supabase
         .from("absensi_entries")
-        .select("id")
+        .select("id, status")
         .eq("session_id", session.id)
         .eq("siswa_id", siswaId)
         .single();
 
-      if (data) {
-        setSudahAbsen(true);
-      } else if (now > end) {
-        await supabase.from("absensi_entries").insert({
-          session_id: session.id,
-          siswa_id: siswaId,
-          status: "tidak hadir",
-        });
-        setSudahAbsen(true);
+      if (entry) {
+        if (entry.status !== "tidak hadir") {
+          setSudahAbsen(true); // Sudah isi absensi
+        }
       }
     };
-    checkAndAutoAbsent();
+
+    fetchAbsensi();
   }, [session.id, siswaId]);
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-    const { error } = await supabase.from("absensi_entries").insert({
-      session_id: session.id,
-      siswa_id: siswaId,
-      status,
-    });
+
+    // Validasi catatan wajib saat izin/sakit
+    if ((status === "izin" || status === "sakit") && catatan.trim() === "") {
+      alert("Harap isi catatan untuk izin atau sakit.");
+      return;
+    }
+
+    const { error } = await supabase
+      .from("absensi_entries")
+      .update({ status, catatan })
+      .eq("session_id", session.id)
+      .eq("siswa_id", siswaId);
+
     if (error) alert("Gagal isi absensi: " + error.message);
     else {
       alert("Berhasil mengisi absensi");
@@ -123,6 +120,7 @@ function FormIsiAbsensi({ session, siswaId }: any) {
       <p className="mb-2 text-sm">
         Oleh: {session.pelatih_profiles?.nama_lengkap}
       </p>
+
       {sudahAbsen ? (
         <p className="text-green-600 font-semibold">✅ Sudah absen</p>
       ) : (
@@ -135,8 +133,18 @@ function FormIsiAbsensi({ session, siswaId }: any) {
             <option value="hadir">Hadir</option>
             <option value="izin">Izin</option>
             <option value="sakit">Sakit</option>
-            <option value="tidak hadir">Tidak Hadir</option>
           </select>
+
+          {(status === "izin" || status === "sakit") && (
+            <textarea
+              value={catatan}
+              onChange={(e) => setCatatan(e.target.value)}
+              className="border p-2 mb-2 w-full"
+              placeholder="Tuliskan alasan izin/sakit..."
+              required
+            />
+          )}
+
           <button className="bg-red-600 text-white px-4 py-1 rounded w-full">
             Kirim
           </button>

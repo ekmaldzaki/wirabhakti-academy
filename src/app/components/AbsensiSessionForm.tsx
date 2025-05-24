@@ -73,21 +73,58 @@ export default function AbsensiSessionForm() {
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
+
     const {
       data: { user },
     } = await supabase.auth.getUser();
     if (!user) return;
 
-    const { error } = await supabase.from("absensi_sessions").insert({
-      tanggal,
-      waktu_mulai: jamMulai,
-      waktu_selesai: jamSelesai,
-      pelatih_id: user.id,
-      cabang_olahraga: cabangOlahraga,
-    });
+    // 1. Tambahkan sesi baru
+    const { data: sessionData, error: sessionError } = await supabase
+      .from("absensi_sessions")
+      .insert({
+        tanggal,
+        waktu_mulai: jamMulai,
+        waktu_selesai: jamSelesai,
+        pelatih_id: user.id,
+        cabang_olahraga: cabangOlahraga,
+      })
+      .select()
+      .single();
 
-    if (error) alert("Gagal membuat sesi: " + error.message);
-    else alert("Sesi absensi berhasil dibuat!");
+    if (sessionError) {
+      alert("Gagal membuat sesi: " + sessionError.message);
+      return;
+    }
+
+    // 2. Ambil semua siswa di cabang olahraga terkait
+    const { data: siswaList, error: siswaError } = await supabase
+      .from("siswa_profiles")
+      .select("id")
+      .eq("cabang_olahraga", cabangOlahraga);
+
+    if (siswaError) {
+      alert("Gagal mengambil data siswa: " + siswaError.message);
+      return;
+    }
+
+    // 3. Insert absensi_entries untuk setiap siswa dengan status "tidak hadir"
+    const entries = siswaList.map((siswa) => ({
+      session_id: sessionData.id,
+      siswa_id: siswa.id,
+      status: "tidak hadir",
+      catatan: null,
+    }));
+
+    const { error: entryError } = await supabase
+      .from("absensi_entries")
+      .insert(entries);
+
+    if (entryError) {
+      alert("Sesi dibuat, tapi gagal buat data absensi: " + entryError.message);
+    } else {
+      alert("Sesi absensi berhasil dibuat dan data siswa disiapkan!");
+    }
   };
 
   return (
