@@ -3,6 +3,7 @@ import Footer from "@/components/Footer";
 import WelcomeCardSiswa from "@/components/WelcomeCardSiswa";
 import ListAbsensiToFill from "@/components/ListAbsensiToFill";
 import SppSiswaView from "@/components/SppViewSiswa";
+import JadwalViewSiswa from "@/components/JadwalViewSiswa";
 
 export default function SiswaPage() {
   return (
@@ -12,6 +13,7 @@ export default function SiswaPage() {
         <WelcomeCardSiswa />
         <ListAbsensiToFill />
         <SppSiswaView />
+        <JadwalViewSiswa />
       </main>
       <Footer />
     </div>

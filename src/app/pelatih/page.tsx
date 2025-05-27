@@ -5,6 +5,8 @@ import AbsensiSessionForm from "@/components/AbsensiSessionForm";
 import AbsensiSessionListPelatih from "@/components/AbsensiSessionListPelatih";
 import SppInputPelatih from "@/components/SppInputPelatih";
 import SppListPelatih from "@/components/SppListPelatih";
+import JadwalInputPelatih from "@/components/JadwalInputPelatih";
+import JadwalListPelatih from "@/components/JadwalListPelatih";
 
 export default function PelatihPage() {
   return (
@@ -16,6 +18,8 @@ export default function PelatihPage() {
         <AbsensiSessionListPelatih />
         <SppInputPelatih />
         <SppListPelatih />
+        <JadwalInputPelatih />
+        <JadwalListPelatih />
       </main>
       <Footer />
     </div>

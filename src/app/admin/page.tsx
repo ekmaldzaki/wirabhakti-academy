@@ -1,5 +1,6 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import AdminUserList from "@/components/AdminUserList";
 
 export default function AdminPage() {
   return (
@@ -7,7 +8,7 @@ export default function AdminPage() {
       <Navbar />
       <main className="flex-grow flex flex-col items-center justify-center text-center p-8">
         <h1 className="text-3xl font-bold text-red-600 mb-4">Halo, Admin!</h1>
-        <p className="text-black">Ini adalah halaman admin.</p>
+        <AdminUserList />
       </main>
       <Footer />
     </div>
