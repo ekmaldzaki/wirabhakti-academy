@@ -2,7 +2,9 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import WelcomeCardPelatih from "@/components/WelcomeCardPelatih";
 import AbsensiSessionForm from "@/components/AbsensiSessionForm";
-import AbsensiSessionListPelatih from "../components/AbsensiSessionListPelatih";
+import AbsensiSessionListPelatih from "@/components/AbsensiSessionListPelatih";
+import SppInputPelatih from "@/components/SppInputPelatih";
+import SppListPelatih from "@/components/SppListPelatih";
 
 export default function PelatihPage() {
   return (
@@ -12,6 +14,8 @@ export default function PelatihPage() {
         <WelcomeCardPelatih />
         <AbsensiSessionForm />
         <AbsensiSessionListPelatih />
+        <SppInputPelatih />
+        <SppListPelatih />
       </main>
       <Footer />
     </div>
