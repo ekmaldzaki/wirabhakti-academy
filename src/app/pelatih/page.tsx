@@ -1,3 +1,4 @@
+"use client";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import WelcomeCardPelatih from "@/components/WelcomeCardPelatih";
@@ -8,7 +9,11 @@ import SppListPelatih from "@/components/SppListPelatih";
 import JadwalInputPelatih from "@/components/JadwalInputPelatih";
 import JadwalListPelatih from "@/components/JadwalListPelatih";
 
+import { useRoleGuard } from "@/lib/useRoleGuard";
+
 export default function PelatihPage() {
+  useRoleGuard(["pelatih"]); // hanya pelatih yang bisa akses
+
   return (
     <div className="min-h-screen flex flex-col bg-white">
       <Navbar />

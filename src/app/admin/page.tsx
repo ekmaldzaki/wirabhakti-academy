@@ -1,8 +1,13 @@
+"use client";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import AdminUserList from "@/components/AdminUserList";
 
+import { useRoleGuard } from "@/lib/useRoleGuard";
+
 export default function AdminPage() {
+  useRoleGuard(["admin"]);
+
   return (
     <div className="min-h-screen flex flex-col bg-white">
       <Navbar />
