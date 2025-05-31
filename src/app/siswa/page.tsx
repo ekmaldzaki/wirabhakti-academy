@@ -4,6 +4,7 @@ import { Home, ClipboardList, Wallet, Calendar } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import WelcomeCardSiswa from "@/components/WelcomeCardSiswa";
+import EventAndSponsorGallery from "@/components/EventAndSponsorGallery";
 import ListAbsensiToFill from "@/components/ListAbsensiToFill";
 import SppSiswaView from "@/components/SppViewSiswa";
 import JadwalViewSiswa from "@/components/JadwalViewSiswa";
@@ -23,7 +24,12 @@ export default function SiswaPage() {
   const renderContent = () => {
     switch (activeTab) {
       case "beranda":
-        return <WelcomeCardSiswa />;
+        return (
+          <>
+            <WelcomeCardSiswa />
+            <EventAndSponsorGallery />
+          </>
+        );
       case "absensi":
         return <ListAbsensiToFill />;
       case "spp":

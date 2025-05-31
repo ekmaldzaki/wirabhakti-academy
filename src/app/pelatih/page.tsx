@@ -5,6 +5,7 @@ import { Home, ClipboardList, Wallet, Calendar } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import WelcomeCardPelatih from "@/components/WelcomeCardPelatih";
+import EventAndSponsorGallery from "@/components/EventAndSponsorGallery";
 import AbsensiSessionForm from "@/components/AbsensiSessionForm";
 import AbsensiSessionListPelatih from "@/components/AbsensiSessionListPelatih";
 import SppInputPelatih from "@/components/SppInputPelatih";
@@ -28,7 +29,12 @@ export default function PelatihPage() {
   const renderContent = () => {
     switch (activeTab) {
       case "beranda":
-        return <WelcomeCardPelatih />;
+        return (
+          <>
+            <WelcomeCardPelatih />
+            <EventAndSponsorGallery />
+          </>
+        );
       case "absensi":
         return (
           <>
