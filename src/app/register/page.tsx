@@ -11,11 +11,12 @@ export default function RegisterPage() {
   const [kodePelatih, setKodePelatih] = useState("");
   const [error, setError] = useState("");
   const router = useRouter();
+  const kodePelatihEnv = process.env.NEXT_PUBLIC_KODE_PELATIH;
 
   const handleRegister = async () => {
     setError("");
 
-    if (role === "pelatih" && kodePelatih !== "SUSUMUSEMANGATKU") {
+    if (role === "pelatih" && kodePelatih !== kodePelatihEnv) {
       setError("Kunci pelatih salah");
       return;
     }
