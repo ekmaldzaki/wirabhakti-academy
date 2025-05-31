@@ -26,7 +26,7 @@ export default function HomePage() {
     <div className="min-h-screen flex flex-col bg-white">
       <Navbar />
       <main className="flex-grow flex flex-col items-center justify-center text-center p-8">
-        <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-lg mb-8 border border-gray-200">
+        <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-full mb-8 border border-gray-200">
           <h1 className="text-3xl font-bold text-red-600 mb-4">
             Selamat datang di Wirabhakti Academy
           </h1>
@@ -54,7 +54,9 @@ export default function HomePage() {
           )}
 
           {!loading && isLoggedIn && (
-            <p className="text-gray-600 mb-8">Senang melihatmu kembali!</p>
+            <p className="text-gray-600 mb-8">
+              Wirabhakti Academy Jaya Jaya Jaya!
+            </p>
           )}
         </div>
       </main>

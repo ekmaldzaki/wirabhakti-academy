@@ -57,7 +57,6 @@ export default function SppListPelatih() {
       return;
     }
 
-    // Jika ingin filter bulan/tahun tertentu di frontend:
     // const bulanRaw = new Date().toLocaleString("id-ID", { month: "long" });
     // const bulanFix = bulanRaw.charAt(0).toUpperCase() + bulanRaw.slice(1).toLowerCase();
     // const tahunFix = new Date().getFullYear();
@@ -90,44 +89,46 @@ export default function SppListPelatih() {
     }).format(number);
 
   return (
-    <div className="bg-white p-4 shadow rounded max-w-4xl mx-auto mt-4 text-black">
+    <div className="bg-white p-4 shadow rounded max-w-full mx-auto mt-4 text-black">
       <h3 className="text-lg font-bold mb-4 text-red-600">
         Daftar SPP Bulan Ini
       </h3>
       {sppList.length === 0 ? (
         <p className="text-sm text-gray-500">Belum ada data SPP bulan ini.</p>
       ) : (
-        <table className="w-full border">
-          <thead>
-            <tr className="bg-gray-100">
-              <th className="border p-2 text-left">Nama</th>
-              <th className="border p-2 text-left">Bulan</th>
-              <th className="border p-2 text-left">Nominal</th>
-              <th className="border p-2 text-left">Catatan</th>
-              <th className="border p-2">Aksi</th>
-            </tr>
-          </thead>
-          <tbody>
-            {sppList.map((entry) => (
-              <tr key={entry.id}>
-                <td className="border p-2">{entry.nama || "Tanpa Nama"}</td>
-                <td className="border p-2">
-                  {entry.bulan} {entry.tahun}
-                </td>
-                <td className="border p-2">{formatRupiah(entry.nominal)}</td>
-                <td className="border p-2">{entry.catatan || "-"}</td>
-                <td className="border p-2 text-center">
-                  <button
-                    onClick={() => handleDelete(entry.id)}
-                    className="text-red-600 hover:underline"
-                  >
-                    Hapus
-                  </button>
-                </td>
+        <div className="w-full overflow-x-auto">
+          <table className="w-full border min-w-[600px]">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="border p-2 text-left">Nama</th>
+                <th className="border p-2 text-left">Bulan</th>
+                <th className="border p-2 text-left">Nominal</th>
+                <th className="border p-2 text-left">Catatan</th>
+                <th className="border p-2">Aksi</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {sppList.map((entry) => (
+                <tr key={entry.id}>
+                  <td className="border p-2">{entry.nama || "Tanpa Nama"}</td>
+                  <td className="border p-2">
+                    {entry.bulan} {entry.tahun}
+                  </td>
+                  <td className="border p-2">{formatRupiah(entry.nominal)}</td>
+                  <td className="border p-2">{entry.catatan || "-"}</td>
+                  <td className="border p-2 text-center">
+                    <button
+                      onClick={() => handleDelete(entry.id)}
+                      className="text-red-600 hover:underline"
+                    >
+                      Hapus
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
     </div>
   );

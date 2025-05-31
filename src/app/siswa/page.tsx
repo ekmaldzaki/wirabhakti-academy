@@ -1,19 +1,19 @@
 "use client";
 import { useState } from "react";
+import { Home, ClipboardList, Wallet, Calendar } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import WelcomeCardSiswa from "@/components/WelcomeCardSiswa";
 import ListAbsensiToFill from "@/components/ListAbsensiToFill";
 import SppSiswaView from "@/components/SppViewSiswa";
 import JadwalViewSiswa from "@/components/JadwalViewSiswa";
-
 import { useRoleGuard } from "@/lib/useRoleGuard";
 
 const TABS = [
-  { id: "beranda", label: "Beranda" },
-  { id: "absensi", label: "Absensi" },
-  { id: "spp", label: "SPP" },
-  { id: "jadwal", label: "Jadwal" },
+  { id: "beranda", label: "Beranda", icon: Home },
+  { id: "absensi", label: "Absensi", icon: ClipboardList },
+  { id: "spp", label: "SPP", icon: Wallet },
+  { id: "jadwal", label: "Jadwal", icon: Calendar },
 ];
 
 export default function SiswaPage() {
@@ -38,29 +38,30 @@ export default function SiswaPage() {
   return (
     <div className="min-h-screen flex flex-col bg-white">
       <Navbar />
+
       <div className="flex flex-col md:flex-row flex-grow">
         {/* Sidebar */}
-        <aside className="w-full md:w-64 bg-gray-100 border-r p-4">
-          <nav className="space-y-2">
-            {TABS.map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`block w-full text-left px-4 py-2 rounded ${
-                  activeTab === tab.id
-                    ? "bg-red-600 text-white font-semibold"
-                    : "hover:bg-gray-200 text-black"
-                }`}
-              >
-                {tab.label}
-              </button>
-            ))}
-          </nav>
+        <aside className="w-full md:w-64 bg-gray-100 border-r p-4 flex md:flex-col gap-4 justify-between md:justify-start">
+          {TABS.map(({ id, label, icon: Icon }) => (
+            <button
+              key={id}
+              onClick={() => setActiveTab(id)}
+              className={`flex flex-col md:flex-row items-center justify-center md:justify-start gap-1 md:gap-3 w-full px-4 py-2 rounded ${
+                activeTab === id
+                  ? "bg-red-600 text-white font-semibold"
+                  : "hover:bg-gray-200 text-black"
+              }`}
+            >
+              <Icon className="w-5 h-5" />
+              <span className="hidden md:inline">{label}</span>
+            </button>
+          ))}
         </aside>
 
         {/* Main content */}
         <main className="flex-grow p-6">{renderContent()}</main>
       </div>
+
       <Footer />
     </div>
   );

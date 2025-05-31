@@ -131,7 +131,7 @@ export default function AbsensiSessionForm() {
     <div className="space-y-6">
       <form
         onSubmit={handleSubmit}
-        className="space-y-2 bg-white p-4 rounded shadow max-w-md w-full text-black"
+        className="space-y-2 bg-white p-4 rounded shadow max-w-full w-full text-black"
       >
         <h3 className="font-bold text-lg text-red-600">Buat Jadwal Absensi</h3>
         <p className="text-sm text-gray-500 mb-2">Oleh: {namaPelatih}</p>
@@ -161,7 +161,7 @@ export default function AbsensiSessionForm() {
         </button>
       </form>
 
-      <div className="bg-white p-4 rounded shadow max-w-md w-full text-black">
+      <div className="bg-white p-4 rounded shadow max-w-full w-full text-black">
         <h3 className="font-bold mb-2">Sesi Sedang Berlangsung</h3>
         {sesiBerlangsung.length === 0 && (
           <p className="text-sm text-gray-500">

@@ -61,46 +61,48 @@ export default function JadwalListPelatih() {
   };
 
   return (
-    <div className="bg-white p-4 shadow rounded max-w-4xl mx-auto mt-4 text-black">
+    <div className="bg-white p-4 shadow rounded max-w-full mx-auto mt-4 text-black">
       <h3 className="text-lg font-bold mb-4 text-red-600">
         Daftar Jadwal Kegiatan
       </h3>
       {jadwalList.length === 0 ? (
         <p className="text-sm text-gray-500">Belum ada jadwal kegiatan.</p>
       ) : (
-        <table className="w-full border">
-          <thead>
-            <tr className="bg-gray-100">
-              <th className="border p-2 text-left">Nama</th>
-              <th className="border p-2 text-left">Kegiatan</th>
-              <th className="border p-2 text-left">Tanggal</th>
-              <th className="border p-2 text-left">Waktu</th>
-              <th className="border p-2 text-left">Catatan</th>
-              <th className="border p-2 text-center">Aksi</th>
-            </tr>
-          </thead>
-          <tbody>
-            {jadwalList.map((entry) => (
-              <tr key={entry.id}>
-                <td className="border p-2">{entry.nama || "Tanpa Nama"}</td>
-                <td className="border p-2">{entry.nama_kegiatan}</td>
-                <td className="border p-2">{entry.tanggal}</td>
-                <td className="border p-2">
-                  {entry.jam_mulai} - {entry.jam_berakhir}
-                </td>
-                <td className="border p-2">{entry.catatan || "-"}</td>
-                <td className="border p-2 text-center">
-                  <button
-                    onClick={() => handleDelete(entry.id)}
-                    className="text-red-600 hover:underline"
-                  >
-                    Hapus
-                  </button>
-                </td>
+        <div className="w-full overflow-x-auto">
+          <table className="w-full border min-w-[600px]">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="border p-2 text-left">Nama</th>
+                <th className="border p-2 text-left">Kegiatan</th>
+                <th className="border p-2 text-left">Tanggal</th>
+                <th className="border p-2 text-left">Waktu</th>
+                <th className="border p-2 text-left">Catatan</th>
+                <th className="border p-2 text-center">Aksi</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {jadwalList.map((entry) => (
+                <tr key={entry.id}>
+                  <td className="border p-2">{entry.nama || "Tanpa Nama"}</td>
+                  <td className="border p-2">{entry.nama_kegiatan}</td>
+                  <td className="border p-2">{entry.tanggal}</td>
+                  <td className="border p-2">
+                    {entry.jam_mulai} - {entry.jam_berakhir}
+                  </td>
+                  <td className="border p-2">{entry.catatan || "-"}</td>
+                  <td className="border p-2 text-center">
+                    <button
+                      onClick={() => handleDelete(entry.id)}
+                      className="text-red-600 hover:underline"
+                    >
+                      Hapus
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
     </div>
   );

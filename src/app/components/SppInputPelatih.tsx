@@ -62,7 +62,7 @@ export default function SppInputPelatih() {
   };
 
   return (
-    <div className="space-y-6 max-w-xl text-black">
+    <div className="space-y-6 max-w-full text-black">
       <form
         onSubmit={handleSubmit}
         className="bg-white p-4 shadow rounded space-y-2"

@@ -27,7 +27,7 @@ export default function EventAndSponsorGallery() {
     <div className="px-4 py-6 max-w-7xl mx-auto space-y-10 text-black">
       {/* Poster Event */}
       <div>
-        <h2 className="text-2xl font-bold text-red-600 mb-4 text-center">
+        <h2 className="text-3xl font-bold text-red-600 mb-4 text-center">
           Poster Event
         </h2>
         <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
@@ -56,10 +56,10 @@ export default function EventAndSponsorGallery() {
 
       {/* Logo Sponsor dan Media Partner */}
       <div>
-        <h2 className="text-2xl font-bold text-red-600 mb-4 text-center">
+        <h2 className="text-3xl font-bold text-red-600 mb-4 text-center">
           Sponsor & Media Partner
         </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {sponsors.map((logo, index) => (
             <div
               key={index}

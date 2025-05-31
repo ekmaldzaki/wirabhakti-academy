@@ -24,7 +24,7 @@ export default function WelcomeCardPelatih() {
   }, []);
 
   return (
-    <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md mb-6 border border-gray-200">
+    <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-full mb-6 border border-gray-200">
       <h2 className="text-2xl font-bold text-red-600 mb-4">
         Halo, {profile?.nama_lengkap || "Pelatih"}!
       </h2>
