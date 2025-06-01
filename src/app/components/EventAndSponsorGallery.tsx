@@ -1,27 +1,47 @@
 "use client";
+import { useEffect, useState } from "react";
 import Image from "next/image";
+import { supabase } from "@/lib/supabase";
 
-interface Poster {
-  title: string;
-  filename: string;
-}
-
-interface Logo {
-  filename: string;
+interface StorageImage {
+  name: string;
+  url: string;
 }
 
 export default function EventAndSponsorGallery() {
-  const posters: Poster[] = [
-    { title: "Poster Event 1", filename: "poster-1.jpg" },
-    { title: "Poster Event 2", filename: "poster-2.jpg" },
-  ];
+  const [posters, setPosters] = useState<StorageImage[]>([]);
+  const [sponsors, setSponsors] = useState<StorageImage[]>([]);
 
-  const sponsors: Logo[] = [
-    { filename: "logo-1.jpg" },
-    { filename: "logo-2.jpg" },
-    { filename: "logo-3.jpg" },
-    { filename: "logo-4.jpg" },
-  ];
+  const fetchImages = async () => {
+    try {
+      const [posterRes, sponsorRes] = await Promise.all([
+        supabase.storage
+          .from("public-assets")
+          .list("event-poster", { search: "" }),
+        supabase.storage.from("public-assets").list("sponsor", { search: "" }),
+      ]);
+
+      console.log("posterRes", posterRes);
+      console.log("sponsorRes", sponsorRes);
+
+      const buildUrls = (folder: string, files: any[]) =>
+        files?.map((file: any) => ({
+          name: file.name,
+          url: supabase.storage
+            .from("public-assets")
+            .getPublicUrl(`${folder}/${file.name}`).data.publicUrl,
+        })) || [];
+
+      if (posterRes.data) setPosters(buildUrls("event-poster", posterRes.data));
+      if (sponsorRes.data) setSponsors(buildUrls("sponsor", sponsorRes.data));
+    } catch (error) {
+      console.error("Failed to fetch images:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchImages();
+  }, []);
 
   return (
     <div className="px-4 py-6 max-w-7xl mx-auto space-y-10 text-black">
@@ -36,18 +56,17 @@ export default function EventAndSponsorGallery() {
               key={index}
               className="bg-white rounded shadow overflow-hidden flex flex-col items-center"
             >
-              {/* Gunakan rasio A4: 3:4 */}
               <div className="relative w-full aspect-[3/4] bg-gray-100 flex items-center justify-center">
                 <Image
-                  src={`/images/${poster.filename}`}
-                  alt={poster.title}
+                  src={poster.url}
+                  alt={poster.name}
                   fill
                   style={{ objectFit: "contain" }}
                   className="w-full h-full"
                 />
               </div>
               <div className="p-4 w-full text-center">
-                <h3 className="text-xl font-semibold">{poster.title}</h3>
+                <h3 className="text-xl font-semibold">{poster.name}</h3>
               </div>
             </div>
           ))}
@@ -67,10 +86,11 @@ export default function EventAndSponsorGallery() {
             >
               <div className="relative w-28 h-20">
                 <Image
-                  src={`/images/${logo.filename}`}
+                  src={logo.url}
                   alt="Logo Sponsor"
-                  layout="fill"
-                  objectFit="contain"
+                  fill
+                  style={{ objectFit: "contain" }}
+                  className="w-full h-full"
                 />
               </div>
             </div>
