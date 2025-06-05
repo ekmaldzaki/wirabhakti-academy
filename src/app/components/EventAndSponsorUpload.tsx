@@ -6,6 +6,7 @@ export default function EventAndSponsorUpload() {
   const [type, setType] = useState("event-poster");
   const [files, setFiles] = useState<FileList | null>(null);
   const [existingFiles, setExistingFiles] = useState<string[]>([]);
+  const [customName, setCustomName] = useState(""); // Tambah state custom name
 
   const fetchFiles = async () => {
     const { data, error } = await supabase.storage
@@ -36,7 +37,14 @@ export default function EventAndSponsorUpload() {
         continue;
       }
 
-      const filePath = `${Date.now()}-${file.name}`;
+      // Tambahkan custom name ke nama file
+      const safeCustomName = customName
+        .trim()
+        .replace(/[^a-zA-Z0-9-_ ]/g, "")
+        .replace(/\s+/g, "-");
+      const filePath = `${Date.now()}___${safeCustomName || "Poster"}___${
+        file.name
+      }`;
       const { error } = await supabase.storage
         .from("public-assets")
         .upload(`${type}/${filePath}`, file);
@@ -50,6 +58,7 @@ export default function EventAndSponsorUpload() {
 
     await fetchFiles();
     setFiles(null); // reset file input
+    setCustomName(""); // reset custom name input
   };
 
   const handleDelete = async (filename: string) => {
@@ -84,6 +93,19 @@ export default function EventAndSponsorUpload() {
         </select>
       </div>
 
+      {/* Input custom name hanya untuk poster event */}
+      {type === "event-poster" && (
+        <div className="mb-4">
+          <input
+            type="text"
+            placeholder="Nama Poster (opsional)"
+            value={customName}
+            onChange={(e) => setCustomName(e.target.value)}
+            className="border p-2 rounded w-full mb-2"
+          />
+        </div>
+      )}
+
       <div className="mb-4">
         <input
           type="file"
@@ -109,7 +131,8 @@ export default function EventAndSponsorUpload() {
               key={file}
               className="flex justify-between items-center border rounded px-3 py-2 bg-gray-50"
             >
-              <span className="truncate">{file}</span>
+              {/* Tampilkan custom name jika ada */}
+              <span className="truncate">{file.split("___")[1] || file}</span>
               <button
                 onClick={() => handleDelete(file)}
                 className="text-red-600 hover:underline text-sm"

@@ -51,25 +51,30 @@ export default function EventAndSponsorGallery() {
           Poster Event
         </h2>
         <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
-          {posters.map((poster, index) => (
-            <div
-              key={index}
-              className="bg-white rounded shadow overflow-hidden flex flex-col items-center"
-            >
-              <div className="relative w-full aspect-[3/4] bg-gray-100 flex items-center justify-center">
-                <Image
-                  src={poster.url}
-                  alt={poster.name}
-                  fill
-                  style={{ objectFit: "contain" }}
-                  className="w-full h-full"
-                />
+          {posters.map((poster, index) => {
+            // Ambil custom name dari nama file
+            const parts = poster.name.split("___");
+            const displayName = parts.length === 3 ? parts[1] : poster.name;
+            return (
+              <div
+                key={index}
+                className="bg-white rounded shadow overflow-hidden flex flex-col items-center"
+              >
+                <div className="relative w-full aspect-[3/4] bg-gray-100 flex items-center justify-center">
+                  <Image
+                    src={poster.url}
+                    alt={displayName}
+                    fill
+                    style={{ objectFit: "contain" }}
+                    className="w-full h-full"
+                  />
+                </div>
+                <div className="p-4 w-full text-center">
+                  <h3 className="text-xl font-semibold">{displayName}</h3>
+                </div>
               </div>
-              <div className="p-4 w-full text-center">
-                <h3 className="text-xl font-semibold">{poster.name}</h3>
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
 
