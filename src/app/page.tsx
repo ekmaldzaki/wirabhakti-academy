@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
-import { useSearchParams, useRouter } from "next/navigation"; // Tambahan penting
+import { useSearchParams, useRouter } from "next/navigation";
 import Navbar from "@/components/Navbar";
 import EventAndSponsorGallery from "@/components/EventAndSponsorGallery";
 import Footer from "@/components/Footer";
@@ -10,31 +10,29 @@ import Footer from "@/components/Footer";
 export default function HomePage() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loading, setLoading] = useState(true);
-  const searchParams = useSearchParams();
   const router = useRouter();
 
   useEffect(() => {
     const checkLogin = async () => {
-      const { data, error } = await supabase.auth.getUser();
-      if (data?.user) {
-        setIsLoggedIn(true);
-      }
+      const { data } = await supabase.auth.getUser();
+      if (data?.user) setIsLoggedIn(true);
       setLoading(false);
     };
 
     checkLogin();
   }, []);
 
-  // 🆕 Penanganan setelah verifikasi email Supabase
   useEffect(() => {
-    const accessToken = searchParams.get("access_token");
-    const type = searchParams.get("type");
+    if (typeof window !== "undefined") {
+      const url = new URL(window.location.href);
+      const accessToken = url.searchParams.get("access_token");
+      const type = url.searchParams.get("type");
 
-    if (accessToken && type === "signup") {
-      // Tunggu sebentar lalu arahkan ke login (atau dashboard jika mau)
-      router.replace("/login");
+      if (accessToken && type === "signup") {
+        router.replace("/login");
+      }
     }
-  }, [searchParams, router]);
+  }, [router]);
 
   return (
     <div className="min-h-screen flex flex-col bg-white">
