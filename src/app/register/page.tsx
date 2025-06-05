@@ -60,7 +60,7 @@ export default function RegisterPage() {
       return;
     }
 
-    alert("Silakan cek email untuk verifikasi");
+    alert("Terima kasih telah mendaftar! Silakan login.");
     router.push("/login");
   };
 
