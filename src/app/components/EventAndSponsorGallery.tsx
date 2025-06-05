@@ -21,9 +21,6 @@ export default function EventAndSponsorGallery() {
         supabase.storage.from("public-assets").list("sponsor", { search: "" }),
       ]);
 
-      console.log("posterRes", posterRes);
-      console.log("sponsorRes", sponsorRes);
-
       const buildUrls = (folder: string, files: any[]) =>
         files?.map((file: any) => ({
           name: file.name,
@@ -43,6 +40,15 @@ export default function EventAndSponsorGallery() {
     fetchImages();
   }, []);
 
+  // Fungsi untuk menampilkan custom name dengan spasi
+  const getDisplayName = (fileName: string) => {
+    const parts = fileName.split("___");
+    if (parts.length === 3) {
+      return parts[1];
+    }
+    return fileName;
+  };
+
   return (
     <div className="px-4 py-6 max-w-7xl mx-auto space-y-10 text-black">
       {/* Poster Event */}
@@ -51,30 +57,27 @@ export default function EventAndSponsorGallery() {
           Poster Event
         </h2>
         <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
-          {posters.map((poster, index) => {
-            // Ambil custom name dari nama file
-            const parts = poster.name.split("___");
-            const displayName = parts.length === 3 ? parts[1] : poster.name;
-            return (
-              <div
-                key={index}
-                className="bg-white rounded shadow overflow-hidden flex flex-col items-center"
-              >
-                <div className="relative w-full aspect-[3/4] bg-gray-100 flex items-center justify-center">
-                  <Image
-                    src={poster.url}
-                    alt={displayName}
-                    fill
-                    style={{ objectFit: "contain" }}
-                    className="w-full h-full"
-                  />
-                </div>
-                <div className="p-4 w-full text-center">
-                  <h3 className="text-xl font-semibold">{displayName}</h3>
-                </div>
+          {posters.map((poster, index) => (
+            <div
+              key={index}
+              className="bg-white rounded shadow overflow-hidden flex flex-col items-center"
+            >
+              <div className="relative w-full aspect-[3/4] bg-gray-100 flex items-center justify-center">
+                <Image
+                  src={poster.url}
+                  alt={getDisplayName(poster.name)}
+                  fill
+                  style={{ objectFit: "contain" }}
+                  className="w-full h-full"
+                />
               </div>
-            );
-          })}
+              <div className="p-4 w-full text-center">
+                <h3 className="text-xl font-semibold">
+                  {getDisplayName(poster.name)}
+                </h3>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
 

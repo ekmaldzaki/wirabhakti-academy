@@ -6,7 +6,7 @@ export default function EventAndSponsorUpload() {
   const [type, setType] = useState("event-poster");
   const [files, setFiles] = useState<FileList | null>(null);
   const [existingFiles, setExistingFiles] = useState<string[]>([]);
-  const [customName, setCustomName] = useState(""); // Tambah state custom name
+  const [customName, setCustomName] = useState("");
 
   const fetchFiles = async () => {
     const { data, error } = await supabase.storage
@@ -28,20 +28,18 @@ export default function EventAndSponsorUpload() {
       const file = files[i];
 
       if (!["image/jpeg", "image/png", "image/jpg"].includes(file.type)) {
-        console.warn("Skipped unsupported file type:", file.name);
         continue;
       }
 
       if (file.size > 10 * 1024 * 1024) {
-        console.warn("Skipped large file:", file.name);
         continue;
       }
 
-      // Tambahkan custom name ke nama file
+      // Simpan custom name dengan spasi asli (tanpa strip)
       const safeCustomName = customName
         .trim()
-        .replace(/[^a-zA-Z0-9-_ ]/g, "")
-        .replace(/\s+/g, "-");
+        .replace(/[^a-zA-Z0-9-_\s]/g, "")
+        .replace(/\s{2,}/g, " ");
       const filePath = `${Date.now()}___${safeCustomName || "Poster"}___${
         file.name
       }`;
@@ -51,14 +49,12 @@ export default function EventAndSponsorUpload() {
 
       if (error) {
         console.error("Upload error:", error.message);
-      } else {
-        console.log("Uploaded:", filePath);
       }
     }
 
     await fetchFiles();
-    setFiles(null); // reset file input
-    setCustomName(""); // reset custom name input
+    setFiles(null);
+    setCustomName("");
   };
 
   const handleDelete = async (filename: string) => {
@@ -77,6 +73,16 @@ export default function EventAndSponsorUpload() {
     fetchFiles();
   }, [type]);
 
+  // Fungsi untuk menampilkan custom name dengan spasi
+  const getDisplayName = (file: string) => {
+    const parts = file.split("___");
+    if (parts.length === 3) {
+      // Pastikan spasi tetap spasi
+      return parts[1];
+    }
+    return file;
+  };
+
   return (
     <div className="bg-white p-6 shadow rounded border max-w-xl mx-auto m-8 text-black">
       <h2 className="text-xl font-bold text-red-600 mb-4">Upload Gambar</h2>
@@ -93,7 +99,6 @@ export default function EventAndSponsorUpload() {
         </select>
       </div>
 
-      {/* Input custom name hanya untuk poster event */}
       {type === "event-poster" && (
         <div className="mb-4">
           <input
@@ -131,8 +136,7 @@ export default function EventAndSponsorUpload() {
               key={file}
               className="flex justify-between items-center border rounded px-3 py-2 bg-gray-50"
             >
-              {/* Tampilkan custom name jika ada */}
-              <span className="truncate">{file.split("___")[1] || file}</span>
+              <span className="truncate">{getDisplayName(file)}</span>
               <button
                 onClick={() => handleDelete(file)}
                 className="text-red-600 hover:underline text-sm"
