@@ -2,26 +2,32 @@ import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
 
-// ✅ Font Google
 const poppins = Poppins({
   variable: "--font-poppins",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
 });
 
-// ✅ Metadata SEO & Social Tags
 export const metadata: Metadata = {
-  title: "Wirabhakti Academy",
-  description: "Website resmi Wirabhakti Academy.",
+  title: "Wirabhakti Academy | Akademi Olahraga Lumajang",
+  description:
+    "Wirabhakti Academy adalah akademi olahraga di Kabupaten Lumajang untuk cabang basket, futsal, dan sepak bola. Siap membentuk atlet-atlet berkualitas dan berdaya saing.",
   metadataBase: new URL("https://wirabhakti-academy.vercel.app"),
   keywords: [
     "Wirabhakti",
     "Wirabhakti Academy",
-    "bela diri",
-    "pelatihan",
-    "siswa",
-    "pelatih",
-    "silat",
+    "akademi olahraga",
+    "basket Lumajang",
+    "futsal Lumajang",
+    "sepak bola Lumajang",
+    "atlet Lumajang",
+    "pelatihan olahraga",
+    "akademi basket",
+    "akademi futsal",
+    "akademi sepak bola",
+    "pembinaan atlet",
+    "olahraga Lumajang",
+    "kabupaten Lumajang",
   ],
   authors: [
     {
@@ -30,8 +36,9 @@ export const metadata: Metadata = {
     },
   ],
   openGraph: {
-    title: "Wirabhakti Academy",
-    description: "Website resmi Wirabhakti Academy.",
+    title: "Wirabhakti Academy | Akademi Olahraga Lumajang",
+    description:
+      "Akademi olahraga di Kabupaten Lumajang untuk basket, futsal, dan sepak bola. Membentuk atlet-atlet berkualitas dan siap bersaing.",
     url: "https://wirabhakti-academy.vercel.app",
     siteName: "Wirabhakti Academy",
     type: "website",
