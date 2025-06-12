@@ -21,10 +21,7 @@ interface AbsensiEntry {
 export default function AbsensiSessionListPelatih() {
   const [absensi, setAbsensi] = useState<AbsensiEntry[]>([]);
   const [filtered, setFiltered] = useState<AbsensiEntry[]>([]);
-  const [cabangList, setCabangList] = useState<string[]>([]);
   const [statusList, setStatusList] = useState<string[]>([]);
-
-  const [filterCabang, setFilterCabang] = useState("semua");
   const [filterStatus, setFilterStatus] = useState("semua");
   const [sortNama, setSortNama] = useState("asc");
 
@@ -75,15 +72,6 @@ export default function AbsensiSessionListPelatih() {
 
       setAbsensi(onlyMyData);
 
-      const allCabang = Array.from(
-        new Set(
-          onlyMyData
-            .map((e) => e.absensi_sessions?.cabang_olahraga)
-            .filter(Boolean)
-        )
-      );
-      setCabangList(allCabang);
-
       const allStatus = Array.from(
         new Set(onlyMyData.map((e) => e.status).filter(Boolean))
       );
@@ -96,11 +84,6 @@ export default function AbsensiSessionListPelatih() {
   useEffect(() => {
     const filteredData = absensi
       .filter((entry) =>
-        filterCabang === "semua"
-          ? true
-          : entry.absensi_sessions?.cabang_olahraga === filterCabang
-      )
-      .filter((entry) =>
         filterStatus === "semua" ? true : entry.status === filterStatus
       )
       .sort((a, b) => {
@@ -112,7 +95,7 @@ export default function AbsensiSessionListPelatih() {
       });
 
     setFiltered(filteredData);
-  }, [absensi, filterCabang, filterStatus, sortNama]);
+  }, [absensi, filterStatus, sortNama]);
 
   return (
     <div className="space-y-4 mt-4 text-black">
@@ -120,19 +103,6 @@ export default function AbsensiSessionListPelatih() {
 
       {/* Filter */}
       <div className="flex gap-2 flex-wrap items-center">
-        <select
-          className="border px-2 py-1"
-          value={filterCabang}
-          onChange={(e) => setFilterCabang(e.target.value)}
-        >
-          <option value="semua">Semua Cabang</option>
-          {cabangList.map((cabang) => (
-            <option key={cabang} value={cabang}>
-              {cabang}
-            </option>
-          ))}
-        </select>
-
         <select
           className="border px-2 py-1"
           value={filterStatus}

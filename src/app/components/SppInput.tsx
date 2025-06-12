@@ -2,7 +2,8 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 
-export default function SppInputPelatih() {
+export default function SppInputAdmin() {
+  const [cabangs, setCabangs] = useState<string[]>([]);
   const [cabang, setCabang] = useState("");
   const [bulan, setBulan] = useState("");
   const [tahun, setTahun] = useState(new Date().getFullYear());
@@ -10,24 +11,20 @@ export default function SppInputPelatih() {
   const [catatan, setCatatan] = useState("");
 
   useEffect(() => {
-    const fetchPelatih = async () => {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      if (!user) return;
+    const fetchCabangs = async () => {
+      const { data, error } = await supabase
+        .from("siswa_profiles")
+        .select("cabang_olahraga");
 
-      const { data: pelatih } = await supabase
-        .from("pelatih_profiles")
-        .select("cabang_olahraga")
-        .eq("id", user.id)
-        .single();
-
-      if (pelatih?.cabang_olahraga) {
-        setCabang(pelatih.cabang_olahraga);
+      if (data) {
+        const uniqueCabangs = Array.from(
+          new Set(data.map((item) => item.cabang_olahraga).filter(Boolean))
+        );
+        setCabangs(uniqueCabangs);
       }
     };
 
-    fetchPelatih();
+    fetchCabangs();
   }, []);
 
   const handleSubmit = async (e: any) => {
@@ -53,7 +50,7 @@ export default function SppInputPelatih() {
       alert("Gagal menambahkan SPP: " + error.message);
     } else {
       alert("SPP berhasil ditambahkan");
-      // Clear form
+      setCabang("");
       setBulan("");
       setTahun(new Date().getFullYear());
       setNominal(0);
@@ -68,12 +65,19 @@ export default function SppInputPelatih() {
         className="bg-white p-4 shadow rounded space-y-2"
       >
         <h3 className="font-bold text-lg text-red-600">Input SPP Bulanan</h3>
-        <input
-          type="text"
+        <select
           value={cabang}
-          readOnly
-          className="w-full p-2 bg-gray-100 border"
-        />
+          onChange={(e) => setCabang(e.target.value)}
+          className="w-full border p-2"
+          required
+        >
+          <option value="">Pilih Cabang Olahraga</option>
+          {cabangs.map((item) => (
+            <option key={item} value={item}>
+              {item}
+            </option>
+          ))}
+        </select>
         <input
           type="text"
           placeholder="Bulan (misal: Mei)"

@@ -12,6 +12,7 @@ export default function SettingsPage() {
     tempat_tanggal_lahir: "",
     cabang_olahraga: "",
     posisi: "",
+    nomor_hp: "",
   });
 
   const router = useRouter();
@@ -81,6 +82,7 @@ export default function SettingsPage() {
     if (role === "siswa") {
       payload.tempat_tanggal_lahir = formData.tempat_tanggal_lahir;
       payload.posisi = formData.posisi;
+      payload.nomor_hp = formData.nomor_hp;
     }
 
     let result;
@@ -97,7 +99,7 @@ export default function SettingsPage() {
       alert("Gagal menyimpan data: " + result.error.message);
     } else {
       alert("Biodata berhasil disimpan!");
-      router.push(`/dashboard/${role}`);
+      router.push(`/`);
     }
   };
 
@@ -147,13 +149,18 @@ export default function SettingsPage() {
                 <label className="block font-medium mb-1">
                   Cabang Olahraga
                 </label>
-                <input
-                  type="text"
+                <select
                   name="cabang_olahraga"
                   value={formData.cabang_olahraga}
                   onChange={handleChange}
                   className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
-                />
+                  required
+                >
+                  <option value="">-- Pilih Cabang Olahraga --</option>
+                  <option value="Basket">Basket</option>
+                  <option value="Futsal">Futsal</option>
+                  <option value="Sepak Bola">Sepak Bola</option>
+                </select>
               </div>
               <div>
                 <label className="block font-medium mb-1">Posisi</label>
@@ -165,19 +172,37 @@ export default function SettingsPage() {
                   className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
                 />
               </div>
+              <div>
+                <label className="block font-medium mb-1">Nomor HP</label>
+                <input
+                  type="tel"
+                  name="nomor_hp"
+                  value={formData.nomor_hp}
+                  onChange={handleChange}
+                  pattern="08[0-9]{8,11}"
+                  placeholder="08xxxxxxxxxx"
+                  className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+                  required
+                />
+              </div>
             </>
           )}
 
           {role === "pelatih" && (
             <div>
               <label className="block font-medium mb-1">Cabang Olahraga</label>
-              <input
-                type="text"
+              <select
                 name="cabang_olahraga"
                 value={formData.cabang_olahraga}
                 onChange={handleChange}
                 className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
-              />
+                required
+              >
+                <option value="">-- Pilih Cabang Olahraga --</option>
+                <option value="Basket">Basket</option>
+                <option value="Futsal">Futsal</option>
+                <option value="Sepak Bola">Sepak Bola</option>
+              </select>
             </div>
           )}
 

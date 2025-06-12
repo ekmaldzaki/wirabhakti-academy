@@ -68,7 +68,9 @@ export default function Navbar() {
   };
 
   const handleDashboard = () => {
-    if (role === "siswa") {
+    if (role === "admin") {
+      router.push("/admin");
+    } else if (role === "siswa") {
       router.push("/siswa");
     } else if (role === "pelatih") {
       router.push("/pelatih");
@@ -103,10 +105,12 @@ export default function Navbar() {
                 {namaLengkap || "Dashboard"}
               </button>
               <button
-                onClick={() => router.push("/settings")}
+                onClick={() =>
+                  router.push(role === "admin" ? "/admin" : "/settings")
+                }
                 className="px-3 py-1 rounded border border-white text-white font-semibold hover:bg-white hover:text-red-700"
               >
-                Pengaturan Akun
+                {role === "admin" ? "Control" : "Pengaturan Akun"}
               </button>
               <button
                 onClick={handleLogout}
@@ -139,12 +143,12 @@ export default function Navbar() {
               </button>
               <button
                 onClick={() => {
-                  router.push("/settings");
+                  router.push(role === "admin" ? "/admin" : "/settings");
                   setMenuOpen(false);
                 }}
                 className="w-full text-left px-4 py-2 rounded border border-white text-white font-semibold"
               >
-                Pengaturan Akun
+                {role === "admin" ? "Control" : "Pengaturan Akun"}
               </button>
               <button
                 onClick={handleLogout}

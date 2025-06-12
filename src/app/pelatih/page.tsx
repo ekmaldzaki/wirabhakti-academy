@@ -7,9 +7,8 @@ import Footer from "@/components/Footer";
 import WelcomeCardPelatih from "@/components/WelcomeCardPelatih";
 import EventAndSponsorGallery from "@/components/EventAndSponsorGallery";
 import AbsensiSessionForm from "@/components/AbsensiSessionForm";
+import AbsensiInputPelatih from "@/components/AbsensiInputPelatih";
 import AbsensiSessionListPelatih from "@/components/AbsensiSessionListPelatih";
-import SppInputPelatih from "@/components/SppInputPelatih";
-import SppListPelatih from "@/components/SppListPelatih";
 import JadwalInputPelatih from "@/components/JadwalInputPelatih";
 import JadwalListPelatih from "@/components/JadwalListPelatih";
 
@@ -39,14 +38,8 @@ export default function PelatihPage() {
         return (
           <>
             <AbsensiSessionForm />
+            <AbsensiInputPelatih />
             <AbsensiSessionListPelatih />
-          </>
-        );
-      case "spp":
-        return (
-          <>
-            <SppInputPelatih />
-            <SppListPelatih />
           </>
         );
       case "jadwal":

@@ -55,7 +55,6 @@ export default function RootLayout({
   return (
     <html lang="id">
       <head>
-        {/* ✅ Favicon */}
         <link rel="icon" href="/images/favicon.png" type="image/png" />
       </head>
       <body className={`${poppins.variable} antialiased`}>{children}</body>
