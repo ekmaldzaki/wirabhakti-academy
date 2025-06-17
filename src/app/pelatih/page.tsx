@@ -17,7 +17,6 @@ import { useRoleGuard } from "@/lib/useRoleGuard";
 const TABS = [
   { id: "beranda", label: "Beranda", icon: Home },
   { id: "absensi", label: "Absensi", icon: ClipboardList },
-  { id: "spp", label: "SPP", icon: Wallet },
   { id: "jadwal", label: "Jadwal", icon: Calendar },
 ];
 
